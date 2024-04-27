@@ -1,0 +1,19 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+
+{% trans_default_domain "Modules.Drsoftfrrecaptcha.Admin" %}
+
+{% block content_header %}
+    {{ parent() }}
+
+    {{ block('header') }}
+
+    {% include '@Modules/drsoftfrrecaptcha/views/templates/admin/layout/_nav.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    {{ block('main') }}
+{% endblock %}
+
+{% block content_footer %}
+    {% include '@Modules/drsoftfrrecaptcha/views/templates/admin/layout/_footer.html.twig' %}
+{% endblock %}
