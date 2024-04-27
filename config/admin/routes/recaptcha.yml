@@ -5,3 +5,17 @@ admin_drsoft_fr_recaptcha_index:
         _controller: DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController::indexAction
         _legacy_controller: AdminDrSoftFrReCaptcha
         _legacy_link: AdminDrSoftFrReCaptcha
+
+admin_drsoft_fr_recaptcha_reset:
+    path: /reset
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController::resetAction
+        _legacy_controller: AdminDrSoftFrReCaptcha
+
+admin_drsoft_fr_recaptcha_save:
+    path: /
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController::saveAction
+        _legacy_controller: AdminDrSoftFrReCaptcha
