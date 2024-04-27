@@ -1,0 +1,2 @@
+_admin_drsoft_fr_recaptcha_routing:
+    resource: "routes/recaptcha.yml"

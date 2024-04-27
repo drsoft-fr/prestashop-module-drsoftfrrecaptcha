@@ -1,0 +1,7 @@
+admin_drsoft_fr_recaptcha_index:
+    path: /
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController::indexAction
+        _legacy_controller: AdminDrSoftFrReCaptcha
+        _legacy_link: AdminDrSoftFrReCaptcha

@@ -1,0 +1,20 @@
+services:
+    # Data factory
+    drsoft_fr.module.recaptcha.data.factory.recaptcha_data_factory:
+        class: DrSoftFr\Module\ReCaptcha\Data\Factory\ReCaptchaDataFactory
+        arguments:
+            - '@drsoft_fr.module.recaptcha.data.configuration.recaptcha_configuration'
+            - "@=service('prestashop.adapter.legacy.context').getLanguages()"
+
+    # Data provider
+    drsoft_fr.module.recaptcha.data.configuration.recaptcha_configuration:
+        class: DrSoftFr\Module\ReCaptcha\Data\Configuration\ReCaptchaConfiguration
+        arguments:
+            - '@prestashop.adapter.legacy.configuration'
+            - "@=service('prestashop.adapter.legacy.context').getLanguages()"
+        public: true
+
+    drsoft_fr.module.recaptcha.data.recaptcha_data_provider:
+        class: DrSoftFr\Module\ReCaptcha\Data\Factory\ReCaptchaDataFactory
+        factory: 'drsoft_fr.module.recaptcha.data.factory.recaptcha_data_factory:getData'
+        public: true
