@@ -13,7 +13,7 @@ use Throwable;
  */
 final class Config
 {
-    const ERROR_MESSAGE_PATTERN = 'drsoftfrrecaptcha - %s - %d - Exception #%d - %s.';
+    const ERROR_MESSAGE_PATTERN = 'drsoftfrrecaptcha - %s - %d - Throwable #%d - %s.';
 
     const INSTALLER_SERVICE = 'drsoft_fr.module.recaptcha.install.installer';
 

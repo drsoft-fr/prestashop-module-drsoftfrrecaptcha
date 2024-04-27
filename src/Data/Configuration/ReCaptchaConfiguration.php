@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace DrSoftFr\Module\ReCaptcha\Data\Configuration;
 
+use DrSoftFr\Module\ReCaptcha\Config;
+use DrSoftFr\Module\ReCaptcha\Exception\ReCaptcha\ReCaptchaConstraintException;
 use Exception;
 use PrestaShop\PrestaShop\Adapter\Configuration;
+use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
+use Throwable;
 
 /**
  * Class ReCaptchaConfiguration
  *
  * This class handles the configuration ReCAPTCHA for the application.
  */
-final class ReCaptchaConfiguration
+final class ReCaptchaConfiguration implements DataConfigurationInterface
 {
     const CONFIGURATION_KEYS = [
         'key_v3' => 'DRSOFT_FR_GOOGLE_PUBLIC_KEY_V3',
@@ -36,12 +40,7 @@ final class ReCaptchaConfiguration
     }
 
     /**
-     * Get the configuration array.
-     *
-     * This method retrieves the configuration values from the `configuration` object and
-     * builds an array using the keys defined in `CONFIGURATION_KEYS` constant.
-     *
-     * @return array The configuration array.
+     * {@inheritdoc}
      */
     public function getConfiguration(): array
     {
@@ -71,29 +70,27 @@ final class ReCaptchaConfiguration
     }
 
     /**
-     * Update the configuration array.
-     *
-     * This method updates the configuration values in the `configuration` object using the provided
-     * configuration array. It validates the configuration before updating and returns an empty array if
-     * the configuration is invalid.
-     *
-     * @param array $configuration The configuration array to update.
-     *
-     * @return array if not empty, populated by validation errors
-     *
-     * @throws Exception
+     * {@inheritdoc}
      */
     public function updateConfiguration(array $configuration): array
     {
-        if (!$this->validateConfiguration($configuration)) {
-            return [];
+        $errors = [];
+
+        try {
+            $this->validateConfiguration($configuration);
+
+            foreach (self::CONFIGURATION_KEYS as $key => $value) {
+                $this->configuration->set($value, $configuration[$key]);
+            }
+        } catch (Throwable $t) {
+            $errors[] = [
+                'key' => Config::createErrorMessage(__METHOD__, __LINE__, $t),
+                'domain' => 'Modules.Drsoftfrrecaptcha.Error',
+                'parameters' => [],
+            ];
         }
 
-        foreach (self::CONFIGURATION_KEYS as $key => $value) {
-            $this->configuration->set($value, $configuration[$key]);
-        }
-
-        return [];
+        return $errors;
     }
 
     /**
@@ -109,26 +106,40 @@ final class ReCaptchaConfiguration
     }
 
     /**
-     * Ensure the parameters passed are valid.
+     * {@inheritdoc}
      *
-     * @param array $configuration
-     *
-     * @return bool Returns true if no exception are thrown
+     * @throws Exception
      */
     public function validateConfiguration(array $configuration): bool
     {
-        if (!isset(
-            $configuration['key_v3']
-        )) {
-            return false;
-        }
-
-        if (
-            !is_string($configuration['key_v3'])
-        ) {
-            return false;
-        }
+        $this->validateKeyV3($configuration);
 
         return true;
+    }
+
+    /**
+     * Validates the 'key_v3' configuration value.
+     *
+     * @param array $configuration The configuration array.
+     *
+     * @return void
+     *
+     * @throws ReCaptchaConstraintException If the 'key_v3' value is not set or is not a string.
+     */
+    private function validateKeyV3(array $configuration): void
+    {
+        if (!isset($configuration['key_v3'])) {
+            throw new ReCaptchaConstraintException(
+                'empty key v3',
+                ReCaptchaConstraintException::INVALID_KEY_V3
+            );
+        }
+
+        if (!is_string($configuration['key_v3'])) {
+            throw new ReCaptchaConstraintException(
+                'invalid key v3',
+                ReCaptchaConstraintException::INVALID_KEY_V3
+            );
+        }
     }
 }
