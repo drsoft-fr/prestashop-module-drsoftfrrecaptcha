@@ -25,7 +25,7 @@ final class InstallerFactory
     {
         return new Installer(
             new ReCaptchaConfiguration(
-                new Configuration(),
+                new Configuration()
             )
         );
     }
