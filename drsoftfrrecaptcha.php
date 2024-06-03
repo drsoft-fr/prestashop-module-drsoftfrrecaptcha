@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use DrSoftFr\Module\ReCaptcha\Config;
 use DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController;
+use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetMediaController;
 use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetVariablesController;
 use DrSoftFr\Module\ReCaptcha\Install\Factory\InstallerFactory;
 use DrSoftFr\Module\ReCaptcha\Install\Installer;
@@ -124,6 +125,19 @@ class drsoftfrrecaptcha extends Module
         Tools::redirectAdmin(
             $this->context->link->getAdminLink(ReCaptchaController::TAB_CLASS_NAME)
         );
+    }
+
+    /**
+     * @param array $p
+     *
+     * @return void
+     */
+    public function hookActionFrontControllerSetMedia(array $p = []): void
+    {
+        $file = _PS_MODULE_DIR_ . $this->name . '/' . $this->name . '.php';
+        $controller = new ActionFrontControllerSetMediaController($this, $file, $this->_path, $p);
+
+        $controller->run();
     }
 
     /**

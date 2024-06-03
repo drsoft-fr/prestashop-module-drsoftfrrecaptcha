@@ -14,6 +14,7 @@ use Throwable;
 final class Installer
 {
     const HOOKS = [
+        'actionFrontControllerSetMedia',
         'actionFrontControllerSetVariables',
     ];
 
