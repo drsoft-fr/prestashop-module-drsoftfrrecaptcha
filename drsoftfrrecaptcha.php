@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use DrSoftFr\Module\ReCaptcha\Config;
 use DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController;
+use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetVariablesController;
 use DrSoftFr\Module\ReCaptcha\Install\Factory\InstallerFactory;
 use DrSoftFr\Module\ReCaptcha\Install\Installer;
 
@@ -36,6 +37,11 @@ class drsoftfrrecaptcha extends Module
      */
     public $moduleGithubIssuesUrl;
 
+    /**
+     * @var bool $isPsVersion8 Indicates whether the version of PrestaShop is 8 or not
+     */
+    public $isPsVersion8;
+
     public function __construct()
     {
         $this->author = 'drSoft.fr';
@@ -67,6 +73,8 @@ class drsoftfrrecaptcha extends Module
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha';
         $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha/issues';
+        $this->isPsVersion8 = (bool)version_compare(_PS_VERSION_, '8.0', '>=');
+
         parent::__construct();
     }
 
@@ -119,6 +127,19 @@ class drsoftfrrecaptcha extends Module
     }
 
     /**
+     * @param array $p
+     *
+     * @return array
+     */
+    public function hookActionFrontControllerSetVariables(array $p = []): array
+    {
+        $file = _PS_MODULE_DIR_ . $this->name . '/' . $this->name . '.php';
+        $controller = new ActionFrontControllerSetVariablesController($this, $file, $this->_path, $p);
+
+        return $controller->run();
+    }
+
+    /**
      * Installs the module
      *
      * @return bool Returns true if the installation is successful, false otherwise.
@@ -134,6 +155,33 @@ class drsoftfrrecaptcha extends Module
         $installer = InstallerFactory::create();
 
         if (!$installer->install($this)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the module is active
+     *
+     * @return bool Returns true if the module is active and the necessary settings are configured, false otherwise
+     *
+     * @throws Exception
+     */
+    public function isModuleActive(): bool
+    {
+        if (!$this->active) {
+            return false;
+        }
+
+        /** @var array $settings */
+        $settings = $this->get(Config::RECAPTCHA_PROVIDER_SERVICE);
+
+        if (
+            false === $settings['active'] ||
+            empty($settings['site_key']) ||
+            empty($settings['secret_key'])
+        ) {
             return false;
         }
 

@@ -14,6 +14,9 @@ use Throwable;
 final class Installer
 {
     const HOOKS = [];
+    const HOOKS = [
+        'actionFrontControllerSetVariables',
+    ];
 
     /**
      * @var ReCaptchaConfiguration

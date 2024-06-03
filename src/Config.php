@@ -17,6 +17,8 @@ final class Config
 
     const INSTALLER_SERVICE = 'drsoft_fr.module.recaptcha.install.installer';
 
+    const RECAPTCHA_PROVIDER_SERVICE = 'drsoft_fr.module.recaptcha.data.recaptcha_data_provider';
+
     /**
      * Creates an error message using the given method, line number and throwable object.
      *
