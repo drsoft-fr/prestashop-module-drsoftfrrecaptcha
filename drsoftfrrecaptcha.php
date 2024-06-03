@@ -56,7 +56,7 @@ class drsoftfrrecaptcha extends Module
             'min' => '1.7.8',
             'max' => _PS_VERSION_
         ];
-        $this->tab = 'emailing';
+        $this->tab = 'front_office_features';
         $this->tabs = [
             [
                 'class_name' => ReCaptchaController::TAB_CLASS_NAME,
