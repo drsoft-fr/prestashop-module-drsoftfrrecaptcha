@@ -20,6 +20,8 @@ translations/*
 ###< translations ###
 
 ###> views ###
+/views/.vite/*
+!/views/.vite/index.php
 /views/css/*
 !/views/css/index.php
 /views/img/*
