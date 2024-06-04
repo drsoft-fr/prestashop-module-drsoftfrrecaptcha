@@ -16,6 +16,7 @@ final class Installer
     const HOOKS = [
         'actionFrontControllerSetMedia',
         'actionFrontControllerSetVariables',
+        'displayHeader',
     ];
 
     /**

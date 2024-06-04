@@ -6,6 +6,7 @@ use DrSoftFr\Module\ReCaptcha\Config;
 use DrSoftFr\Module\ReCaptcha\Controller\Admin\ReCaptchaController;
 use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetMediaController;
 use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetVariablesController;
+use DrSoftFr\Module\ReCaptcha\Controller\Hook\DisplayHeaderController;
 use DrSoftFr\Module\ReCaptcha\Install\Factory\InstallerFactory;
 use DrSoftFr\Module\ReCaptcha\Install\Installer;
 
@@ -149,6 +150,19 @@ class drsoftfrrecaptcha extends Module
     {
         $file = _PS_MODULE_DIR_ . $this->name . '/' . $this->name . '.php';
         $controller = new ActionFrontControllerSetVariablesController($this, $file, $this->_path, $p);
+
+        return $controller->run();
+    }
+
+    /**
+     * @param array $p
+     *
+     * @return string
+     */
+    public function hookDisplayHeader(array $p = []): string
+    {
+        $file = _PS_MODULE_DIR_ . $this->name . '/' . $this->name . '.php';
+        $controller = new DisplayHeaderController($this, $file, $this->_path, $p);
 
         return $controller->run();
     }
