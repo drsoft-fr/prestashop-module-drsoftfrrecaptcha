@@ -10,15 +10,50 @@ use DrSoftFr\Module\ReCaptcha\Config;
 use DrSoftFr\PrestaShopModuleHelper\Controller\Hook\AbstractHookController;
 use DrSoftFr\PrestaShopModuleHelper\Controller\Hook\HookControllerInterface;
 use Exception;
+use Module;
 use RegistrationController;
+use Symfony\Component\Asset\Package;
+use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use Throwable;
 
 final class ActionFrontControllerSetMediaController extends AbstractHookController implements HookControllerInterface
 {
     /**
+     * @var Package
+     */
+    private $manifest;
+
+    /**
      * @var array $settings
      */
     private $settings;
+
+    /**
+     * @param Module $module
+     * @param string $file
+     * @param string $path
+     * @param array $props
+     */
+    public function __construct(
+        Module $module,
+        string $file,
+        string $path,
+        array  $props
+    )
+    {
+        parent::__construct(
+            $module,
+            $file,
+            $path,
+            $props
+        );
+
+        $this->manifest = new Package(
+            new JsonManifestVersionStrategy(
+                _PS_MODULE_DIR_ . '/' . $this->module->name . '/views/.vite/manifest.json'
+            )
+        );
+    }
 
     /**
      * Handles an exception by logging an error message.
@@ -93,7 +128,7 @@ final class ActionFrontControllerSetMediaController extends AbstractHookControll
 
             if (true === $this->settings['import_google_recaptcha_script']) {
                 $this->getContext()->controller->registerJavascript(
-                    'modules-' . $this->module->name . 'google-recaptcha',
+                    'modules-' . $this->module->name . '-google-recaptcha',
                     "https://www.google.com/recaptcha/api.js?render={$this->settings['site_key']}",
                     [
                         'attributes' => 'async',
@@ -101,6 +136,11 @@ final class ActionFrontControllerSetMediaController extends AbstractHookControll
                     ]
                 );
             }
+
+            $this->getContext()->controller->registerJavascript(
+                'modules-' . $this->module->name . '-recaptcha-v3',
+                'modules/' . $this->module->name . '/views/' . $this->manifest->getUrl('src/js/front/recaptcha-v3.ts')['file']
+            );
         } catch (Throwable $t) {
             $this->handleException($t);
         }
