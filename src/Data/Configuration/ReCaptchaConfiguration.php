@@ -33,6 +33,8 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'activated_on_contact_form' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_ACTIVATED_ON_CONTACT_FORM',
         'activated_on_login_form' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_ACTIVATED_ON_LOGIN_FORM',
         'activated_on_registration_form' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_ACTIVATED_ON_REGISTRATION_FORM',
+        'import_google_recaptcha_script' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_IMPORT_SCRIPT',
+        'insert_google_recaptcha_preconnect_link' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_INSERT_PRECONNECT_LINK',
         'score' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SCORE',
         'site_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SITE_KEY',
         'secret_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SECRET_KEY',
@@ -45,6 +47,8 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'activated_on_contact_form' => false,
         'activated_on_login_form' => false,
         'activated_on_registration_form' => false,
+        'import_google_recaptcha_script' => true,
+        'insert_google_recaptcha_preconnect_link' => true,
         'score' => 1.0,
         'site_key' => '',
         'secret_key' => '',
@@ -79,7 +83,9 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
                     'active',
                     'activated_on_contact_form',
                     'activated_on_login_form',
-                    'activated_on_registration_form'
+                    'activated_on_registration_form',
+                    'import_google_recaptcha_script',
+                    'insert_google_recaptcha_preconnect_link'
                 ],
                 true
             )) {
@@ -177,6 +183,8 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             ->validateActivatedOnContactForm($configuration)
             ->validateActivatedOnLoginForm($configuration)
             ->validateActivatedOnRegistrationForm($configuration)
+            ->validateImportGoogleRecaptchaScript($configuration)
+            ->validateInsertGoogleRecaptchaPreconnectLink($configuration)
             ->validateScore($configuration)
             ->validateSiteKey($configuration)
             ->validateSecretKey($configuration)
@@ -292,6 +300,62 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             throw new ReCaptchaConstraintException(
                 'invalid activated_on_registration_form field',
                 ReCaptchaConstraintException::INVALID_ACTIVATED_ON_REGISTRATION_FORM
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validates the "import_google_recaptcha_script" field of the ReCaptcha configuration.
+     *
+     * @param array $configuration The ReCaptcha configuration array.
+     *
+     * @return ReCaptchaConfiguration The ReCaptcha configuration object.
+     *
+     * @throws ReCaptchaConstraintException When the "import_google_recaptcha_script" field is missing or invalid.
+     */
+    private function validateImportGoogleRecaptchaScript(array $configuration): ReCaptchaConfiguration
+    {
+        if (!isset($configuration['import_google_recaptcha_script'])) {
+            throw new ReCaptchaConstraintException(
+                'empty import_google_recaptcha_script field',
+                ReCaptchaConstraintException::IMPORT_GOOGLE_RECAPTCHA_SCRIPT
+            );
+        }
+
+        if (!is_bool($configuration['import_google_recaptcha_script'])) {
+            throw new ReCaptchaConstraintException(
+                'invalid import_google_recaptcha_script field',
+                ReCaptchaConstraintException::IMPORT_GOOGLE_RECAPTCHA_SCRIPT
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validates the "insert_google_recaptcha_preconnect_link" field of the ReCaptcha configuration.
+     *
+     * @param array $configuration The ReCaptcha configuration array.
+     *
+     * @return ReCaptchaConfiguration The ReCaptcha configuration object.
+     *
+     * @throws ReCaptchaConstraintException When the "insert_google_recaptcha_preconnect_link" field is missing or invalid.
+     */
+    private function validateInsertGoogleRecaptchaPreconnectLink(array $configuration): ReCaptchaConfiguration
+    {
+        if (!isset($configuration['insert_google_recaptcha_preconnect_link'])) {
+            throw new ReCaptchaConstraintException(
+                'empty insert_google_recaptcha_preconnect_link field',
+                ReCaptchaConstraintException::INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
+            );
+        }
+
+        if (!is_bool($configuration['insert_google_recaptcha_preconnect_link'])) {
+            throw new ReCaptchaConstraintException(
+                'invalid insert_google_recaptcha_preconnect_link field',
+                ReCaptchaConstraintException::INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
             );
         }
 

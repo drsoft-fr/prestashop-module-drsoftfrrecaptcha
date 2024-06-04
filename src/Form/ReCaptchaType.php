@@ -44,9 +44,9 @@ final class ReCaptchaType extends TranslatorAwareType
      */
     public function __construct(
         TranslatorInterface $translator,
-        array $locales,
-        array $v2typeChoices,
-        array $versionChoices
+        array               $locales,
+        array               $v2typeChoices,
+        array               $versionChoices
     )
     {
         parent::__construct($translator, $locales);
@@ -89,6 +89,22 @@ final class ReCaptchaType extends TranslatorAwareType
                 'empty_data' => false,
                 'label' => $this->trans(
                     'Activated on registration Form',
+                    'Modules.Drsoftfrrecaptcha.Admin'
+                ),
+                'required' => true,
+            ])
+            ->add('import_google_recaptcha_script', SwitchType::class, [
+                'empty_data' => true,
+                'label' => $this->trans(
+                    'Enable import of Google ReCAPTCHA scripts?',
+                    'Modules.Drsoftfrrecaptcha.Admin'
+                ),
+                'required' => true,
+            ])
+            ->add('insert_google_recaptcha_preconnect_link', SwitchType::class, [
+                'empty_data' => true,
+                'label' => $this->trans(
+                    'Insert Google ReCAPTCHA preconnect links?',
                     'Modules.Drsoftfrrecaptcha.Admin'
                 ),
                 'required' => true,
