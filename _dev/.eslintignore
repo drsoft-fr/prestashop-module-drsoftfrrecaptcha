@@ -1,0 +1,4 @@
+admin-dev/
+node_modules/
+.prettierrc
+.eslintrc
