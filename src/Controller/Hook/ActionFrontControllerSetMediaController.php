@@ -91,14 +91,16 @@ final class ActionFrontControllerSetMediaController extends AbstractHookControll
                 return;
             }
 
-            $this->getContext()->controller->registerJavascript(
-                'modules-' . $this->module->name . 'google-recaptcha',
-                "https://www.google.com/recaptcha/api.js?render={$this->settings['site_key']}",
-                [
-                    'attributes' => 'async',
-                    'server' => 'remote'
-                ]
-            );
+            if (true === $this->settings['import_google_recaptcha_script']) {
+                $this->getContext()->controller->registerJavascript(
+                    'modules-' . $this->module->name . 'google-recaptcha',
+                    "https://www.google.com/recaptcha/api.js?render={$this->settings['site_key']}",
+                    [
+                        'attributes' => 'async',
+                        'server' => 'remote'
+                    ]
+                );
+            }
         } catch (Throwable $t) {
             $this->handleException($t);
         }
