@@ -69,4 +69,20 @@ interface JsonResponseInterface {
   message: string
 }
 
-export { JsonResponseInterface, PrestashopWindowInterface, type UnknownType }
+/**
+ * Represents the return type of a function that prepares form-related objects.
+ *
+ * @interface
+ */
+interface PrepareFormObjectReturnInterface {
+  btnElm: HTMLButtonElement | null
+  formElm: HTMLFormElement | null
+}
+
+export {
+  DrSoftFrReCaptchaObjectInterface,
+  JsonResponseInterface,
+  PrepareFormObjectReturnInterface,
+  PrestashopWindowInterface,
+  type UnknownType,
+}
