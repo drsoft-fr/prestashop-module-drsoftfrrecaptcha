@@ -18,16 +18,6 @@ use Throwable;
  */
 final class ReCaptchaConfiguration implements DataConfigurationInterface
 {
-    const GOOGLE_RECAPTCHA_V2_TYPE = [
-        1 => 'light',
-        2 => 'dark'
-    ];
-
-    const GOOGLE_RECAPTCHA_VERSION_TYPE = [
-        1 => 'v2',
-        2 => 'v3'
-    ];
-
     const CONFIGURATION_KEYS = [
         'active' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_ACTIVE',
         'activated_on_contact_form' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_ACTIVATED_ON_CONTACT_FORM',
@@ -38,8 +28,6 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'score' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SCORE',
         'site_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SITE_KEY',
         'secret_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SECRET_KEY',
-        'v2_type' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_V2_TYPE',
-        'version' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_VERSION',
     ];
 
     const CONFIGURATION_DEFAULT_VALUES = [
@@ -52,8 +40,6 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'score' => 1.0,
         'site_key' => '',
         'secret_key' => '',
-        'v2_type' => 1,
-        'version' => 2
     ];
 
     /**
@@ -90,19 +76,6 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
                 true
             )) {
                 $configuration[$key] = $this->configuration->getBoolean($value, self::CONFIGURATION_DEFAULT_VALUES[$key]);
-
-                continue;
-            }
-
-            if (in_array(
-                $key,
-                [
-                    'v2_type',
-                    'version'
-                ],
-                true
-            )) {
-                $configuration[$key] = $this->configuration->getInt($value, self::CONFIGURATION_DEFAULT_VALUES[$key]);
 
                 continue;
             }
@@ -187,9 +160,7 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             ->validateInsertGoogleRecaptchaPreconnectLink($configuration)
             ->validateScore($configuration)
             ->validateSiteKey($configuration)
-            ->validateSecretKey($configuration)
-            ->validateV2Type($configuration)
-            ->validateVersion($configuration);
+            ->validateSecretKey($configuration);
 
         return true;
     }
@@ -430,11 +401,11 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
      *
      * @param array $configuration The ReCaptcha configuration array.
      *
-     * @return ReCaptchaConfiguration The ReCaptcha configuration object.
+     * @return void
      *
      * @throws ReCaptchaConstraintException When the "secret_key" field is missing or invalid.
      */
-    private function validateSecretKey(array $configuration): ReCaptchaConfiguration
+    private function validateSecretKey(array $configuration): void
     {
         if (!isset($configuration['secret_key'])) {
             throw new ReCaptchaConstraintException(
@@ -447,68 +418,6 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             throw new ReCaptchaConstraintException(
                 'invalid secret_key field',
                 ReCaptchaConstraintException::INVALID_SECRET_KEY
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Validates the "v2_type" field of the ReCaptcha configuration.
-     *
-     * @param array $configuration The ReCaptcha configuration array.
-     *
-     * @return ReCaptchaConfiguration The ReCaptcha configuration object.
-     *
-     * @throws ReCaptchaConstraintException When the "v2_type" field is missing or invalid.
-     */
-    private function validateV2Type(array $configuration): ReCaptchaConfiguration
-    {
-        if (!isset($configuration['v2_type'])) {
-            throw new ReCaptchaConstraintException(
-                'empty v2_type field',
-                ReCaptchaConstraintException::INVALID_V2_TYPE
-            );
-        }
-
-        if (
-            !is_int($configuration['v2_type']) ||
-            !key_exists($configuration['v2_type'], self::GOOGLE_RECAPTCHA_V2_TYPE)
-        ) {
-            throw new ReCaptchaConstraintException(
-                'invalid v2_type field',
-                ReCaptchaConstraintException::INVALID_V2_TYPE
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * Validates the "version" field of the ReCaptcha configuration.
-     *
-     * @param array $configuration The ReCaptcha configuration array.
-     *
-     * @return void
-     *
-     * @throws ReCaptchaConstraintException When the "version" field is missing or invalid.
-     */
-    private function validateVersion(array $configuration): void
-    {
-        if (!isset($configuration['version'])) {
-            throw new ReCaptchaConstraintException(
-                'empty version field',
-                ReCaptchaConstraintException::INVALID_VERSION
-            );
-        }
-
-        if (
-            !is_int($configuration['version']) ||
-            !key_exists($configuration['version'], self::GOOGLE_RECAPTCHA_VERSION_TYPE)
-        ) {
-            throw new ReCaptchaConstraintException(
-                'invalid version field',
-                ReCaptchaConstraintException::INVALID_VERSION
             );
         }
     }

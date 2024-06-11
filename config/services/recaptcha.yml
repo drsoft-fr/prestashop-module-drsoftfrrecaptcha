@@ -1,11 +1,5 @@
 services:
     # Form services
-    drsoft_fr.module.recaptcha.form.choice_provider.recaptcha_choice_provider:
-        class: DrSoftFr\Module\ReCaptcha\Form\ChoiceProvider\ReCaptchaChoiceProvider
-        arguments:
-            - '@=constant("DrSoftFr\\Module\\ReCaptcha\\Data\\Configuration\\ReCaptchaConfiguration::GOOGLE_RECAPTCHA_V2_TYPE")'
-            - '@=constant("DrSoftFr\\Module\\ReCaptcha\\Data\\Configuration\\ReCaptchaConfiguration::GOOGLE_RECAPTCHA_VERSION_TYPE")'
-
     drsoft_fr.module.recaptcha.form.data_provider.recaptcha_form_data_provider:
         class: DrSoftFr\Module\ReCaptcha\Form\DataProvider\ReCaptchaFormDataProvider
         arguments:
@@ -25,8 +19,5 @@ services:
     drsoft_fr.module.recaptcha.form.recaptcha_type:
         class: DrSoftFr\Module\ReCaptcha\Form\ReCaptchaType
         parent: 'form.type.translatable.aware'
-        arguments:
-            - '@=service("drsoft_fr.module.recaptcha.form.choice_provider.recaptcha_choice_provider").getV2TypeChoices()'
-            - '@=service("drsoft_fr.module.recaptcha.form.choice_provider.recaptcha_choice_provider").getVersionChoices()'
         tags:
             - { name: form.type }

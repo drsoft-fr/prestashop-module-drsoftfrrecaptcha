@@ -6,12 +6,10 @@ namespace DrSoftFr\Module\ReCaptcha\Form;
 
 use PrestaShop\PrestaShop\Core\ConstraintValidator\Constraints\CleanHtml;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
-use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -24,37 +22,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 final class ReCaptchaType extends TranslatorAwareType
 {
-    /**
-     * @var array
-     */
-    private $v2typeChoices;
-
-    /**
-     * @var array
-     */
-    private $versionChoices;
-
-    /**
-     * Class Constructor.
-     *
-     * @param TranslatorInterface $translator The translator interface instance.
-     * @param array $locales The array of locales.
-     * @param array $v2typeChoices The array of v2 type choices.
-     * @param array $versionChoices The array of version choices.
-     */
-    public function __construct(
-        TranslatorInterface $translator,
-        array               $locales,
-        array               $v2typeChoices,
-        array               $versionChoices
-    )
-    {
-        parent::__construct($translator, $locales);
-
-        $this->v2typeChoices = $v2typeChoices;
-        $this->versionChoices = $versionChoices;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -176,24 +143,6 @@ final class ReCaptchaType extends TranslatorAwareType
                     'Modules.Drsoftfrrecaptcha.Admin'
                 ),
                 'required' => false,
-            ])
-            ->add('v2_type', ChoiceType::class, [
-                'choices' => $this->v2typeChoices,
-                'expanded' => true,
-                'label' => $this->trans(
-                    'Type',
-                    'Modules.Drsoftfrrecaptcha.Admin'
-                ),
-                'required' => true,
-            ])
-            ->add('version', ChoiceType::class, [
-                'choices' => $this->versionChoices,
-                'expanded' => true,
-                'label' => $this->trans(
-                    'Version',
-                    'Modules.Drsoftfrrecaptcha.Admin'
-                ),
-                'required' => true,
             ]);
     }
 }
