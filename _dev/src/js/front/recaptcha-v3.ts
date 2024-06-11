@@ -97,22 +97,28 @@ import {
   }
 
   /**
-   * Handles errors during registration.
+   * Handles errors in a form submission.
    *
    * @param {HTMLFormElement} form - The form element.
+   * @param {null|string} [message=null] - Optional error message.
    *
-   * @returns {Promise<void>} - A Promise that resolves to nothing.
+   * @returns {void} - A promise that resolves when error handling is complete.
    */
-  const handleError = async (form: HTMLFormElement): Promise<void> => {
+  const handleError = (
+    form: HTMLFormElement,
+    message: null | string = null,
+  ): void => {
     const alertElms = document.getElementsByClassName('alert-danger')
 
     if (0 < alertElms.length) {
       return
     }
 
-    const message = `<p class="alert alert-danger">${TEXT.error}</p>`
+    const html = `<p class="alert alert-danger">${
+      !message ? TEXT.error : message
+    }</p>`
 
-    form.prepend(message)
+    form.insertAdjacentHTML('afterbegin', html)
   }
 
   /**
@@ -129,9 +135,9 @@ import {
     btnElm: HTMLButtonElement,
     formElm: HTMLFormElement | null = null,
   ): void => {
-    ev.preventDefault()
-
     grecaptcha.ready(async () => {
+      ev.preventDefault()
+
       formElm = formElm || btnElm.closest('form')
 
       if (null === formElm) {
@@ -139,13 +145,22 @@ import {
       }
 
       try {
-        const token = await grecaptcha.execute(props.siteKey, {
-          action: 'submit',
-        })
+        let token
+
+        try {
+          token = await grecaptcha.execute(props.siteKey, {
+            action: 'submit',
+          })
+        } catch (error) {
+          handleError(formElm)
+
+          return
+        }
+
         const response = await postForm(token)
 
         if (!response.success) {
-          await handleError(formElm)
+          handleError(formElm, response.message)
 
           return
         }
