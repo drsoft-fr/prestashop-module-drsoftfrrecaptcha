@@ -4,7 +4,6 @@ services:
         class: DrSoftFr\Module\ReCaptcha\Data\Factory\ReCaptchaDataFactory
         arguments:
             - '@drsoft_fr.module.recaptcha.data.configuration.recaptcha_configuration'
-            - "@=service('prestashop.adapter.legacy.context').getLanguages()"
 
     # Data provider
     drsoft_fr.module.recaptcha.data.configuration.recaptcha_configuration:
