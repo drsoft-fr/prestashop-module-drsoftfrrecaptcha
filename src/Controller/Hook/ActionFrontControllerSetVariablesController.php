@@ -111,7 +111,7 @@ final class ActionFrontControllerSetVariablesController extends AbstractHookCont
                     ->getContext()
                     ->getTranslator()
                     ->trans(
-                        'Error during registration, please contact us for further assistance.',
+                        'Error during submission, please contact us for further assistance.',
                         [],
                         'Modules.Drsoftfrrecaptcha.Shop'
                     )

@@ -32,7 +32,7 @@ import {
    */
   const TEXT: JsTextType = {
     error:
-      'Error during registration, please contact us for further assistance.',
+      'Error during submission, please contact us for further assistance.',
   }
 
   /**
