@@ -1,6 +1,7 @@
 import {
   DrSoftFrReCaptchaObjectInterface,
   JsonResponseInterface,
+  JsTextType,
   PrepareFormObjectReturnInterface,
 } from '@src/types/app'
 ;((): void => {
@@ -21,6 +22,18 @@ import {
    */
   const props: DrSoftFrReCaptchaObjectInterface =
     window.prestashop.modules.drsoftfrrecaptcha
+
+  /**
+   * A collection of text messages.
+   *
+   * @type {JsTextType}
+   *
+   * @property {string} error - An error message for registration failure.
+   */
+  const TEXT: JsTextType = {
+    error:
+      'Error during registration, please contact us for further assistance.',
+  }
 
   /**
    * Adds reCAPTCHA attributes and an event listener to a button element.
@@ -63,12 +76,16 @@ import {
   /**
    * Function to get element by id and handle null check
    *
-   * @param {string} identifier
+   * @param {string} identifier - The ID of the element to retrieve.
    *
-   * @returns {HTMLElement|null}
+   * @returns {HTMLElement|null}  - The element with the specified ID, or null if not found.
+   *
+   * @template T - The type of the element to retrieve, extending HTMLElement.
    */
-  const getElementById = (identifier: string): HTMLElement | null => {
-    const elm = document.getElementById(identifier)
+  const getElementById = <T extends HTMLElement>(
+    identifier: string,
+  ): T | null => {
+    const elm = document.getElementById(identifier) as T
 
     if (!elm) {
       console.error(`Element with ${identifier} not found`)
@@ -93,8 +110,7 @@ import {
       return
     }
 
-    const message =
-      '<p class="alert alert-danger">Error during registration, please contact us for further assistance.</p>'
+    const message = `<p class="alert alert-danger">${TEXT.error}</p>`
 
     form.prepend(message)
   }
@@ -139,6 +155,23 @@ import {
 
       formElm.submit()
     })
+  }
+
+  /**
+   * Initializes the texts by merging the provided texts with the default texts.
+   *
+   * @param {JsTextType} texts - The custom texts object.
+   * @param {JsTextType} defaultTexts - The default texts object.
+   *
+   * @return {JsTextType} - The merged texts object.
+   */
+  const initializeTexts = (
+    texts: JsTextType,
+    defaultTexts: JsTextType,
+  ): JsTextType => {
+    return {
+      error: texts.error ?? defaultTexts.error,
+    }
   }
 
   /**
@@ -203,7 +236,7 @@ import {
    * @throws {Error} If there is an error during the preparation of the contact form.
    */
   const prepareContactForm = (): PrepareFormObjectReturnInterface => {
-    const bodyElm = getElementById('contact') as HTMLBodyElement | null
+    const bodyElm = getElementById<HTMLBodyElement>('contact')
     const alertElms = document.querySelectorAll('#contact .alert.alert-success')
 
     if (!bodyElm || 0 < alertElms.length) {
@@ -225,8 +258,8 @@ import {
    * @throws {Error} - If there was an error during the preparation of the login form.
    */
   const prepareLoginForm = (): PrepareFormObjectReturnInterface => {
-    const bodyElm = getElementById('authentication') as HTMLBodyElement | null
-    const formElm = getElementById('login-form') as HTMLFormElement | null
+    const bodyElm = getElementById<HTMLBodyElement>('authentication')
+    const formElm = getElementById<HTMLFormElement>('login-form')
     const urlParams = new URLSearchParams(window.location.search)
 
     if (!bodyElm || !formElm || urlParams.has('create_account')) {
@@ -278,6 +311,7 @@ import {
         return
       }
 
+      initializeTexts(props.text ?? {}, TEXT)
       prepareForm(props.formType as 'contact' | 'login' | 'registration')
     } catch (error) {
       console.error(error)

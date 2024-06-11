@@ -106,6 +106,16 @@ final class ActionFrontControllerSetVariablesController extends AbstractHookCont
                     'validation',
                     ['ajax' => true]
                 );
+            $values['text'] = [
+                'error' => $this
+                    ->getContext()
+                    ->getTranslator()
+                    ->trans(
+                        'Error during registration, please contact us for further assistance.',
+                        [],
+                        'Modules.Drsoftfrrecaptcha.Shop'
+                    )
+            ];
         } catch (Throwable $t) {
             $this->handleException($t);
         }

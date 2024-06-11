@@ -12,6 +12,7 @@ interface DrSoftFrReCaptchaObjectInterface {
   formType: string
   moduleDrsoftfrrecaptchaVerifyReCaptchaV3Url: string
   siteKey: string
+  text: JsTextType
 }
 
 /**
@@ -79,10 +80,16 @@ interface PrepareFormObjectReturnInterface {
   formElm: HTMLFormElement | null
 }
 
+/**
+ * Represents a JavaScript object that stores key-value pairs of strings.
+ */
+type JsTextType = Record<string, string>
+
 export {
   DrSoftFrReCaptchaObjectInterface,
   JsonResponseInterface,
   PrepareFormObjectReturnInterface,
   PrestashopWindowInterface,
+  type JsTextType,
   type UnknownType,
 }
