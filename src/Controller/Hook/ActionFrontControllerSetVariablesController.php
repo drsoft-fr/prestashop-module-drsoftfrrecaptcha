@@ -12,6 +12,7 @@ use DrSoftFr\PrestaShopModuleHelper\Controller\Hook\HookControllerInterface;
 use Exception;
 use RegistrationController;
 use Throwable;
+use Tools;
 
 /**
  * Class ActionFrontControllerSetVariablesController
@@ -58,18 +59,18 @@ final class ActionFrontControllerSetVariablesController extends AbstractHookCont
             return $this->settings['activated_on_contact_form'] ? 'contact' : false;
         }
 
-        if ($this->getContext()->controller instanceof AuthController) {
-            return $this->settings['activated_on_login_form'] ? 'login' : false;
-        }
-
         if ($this->module->isPsVersion8) {
             if ($this->getContext()->controller instanceof RegistrationController) {
                 return $this->settings['activated_on_registration_form'] ? 'registration' : false;
             }
-        } else {
-            if ($this->getContext()->controller instanceof AuthController) {
+        }
+
+        if ($this->getContext()->controller instanceof AuthController) {
+            if (true === Tools::isSubmit('create_account')) {
                 return $this->settings['activated_on_registration_form'] ? 'registration' : false;
             }
+
+            return $this->settings['activated_on_login_form'] ? 'login' : false;
         }
 
         return false;
