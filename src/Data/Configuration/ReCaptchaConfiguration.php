@@ -294,14 +294,14 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         if (!isset($configuration['import_google_recaptcha_script'])) {
             throw new ReCaptchaConstraintException(
                 'empty import_google_recaptcha_script field',
-                ReCaptchaConstraintException::IMPORT_GOOGLE_RECAPTCHA_SCRIPT
+                ReCaptchaConstraintException::INVALID_IMPORT_GOOGLE_RECAPTCHA_SCRIPT
             );
         }
 
         if (!is_bool($configuration['import_google_recaptcha_script'])) {
             throw new ReCaptchaConstraintException(
                 'invalid import_google_recaptcha_script field',
-                ReCaptchaConstraintException::IMPORT_GOOGLE_RECAPTCHA_SCRIPT
+                ReCaptchaConstraintException::INVALID_IMPORT_GOOGLE_RECAPTCHA_SCRIPT
             );
         }
 
@@ -322,14 +322,14 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         if (!isset($configuration['insert_google_recaptcha_preconnect_link'])) {
             throw new ReCaptchaConstraintException(
                 'empty insert_google_recaptcha_preconnect_link field',
-                ReCaptchaConstraintException::INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
+                ReCaptchaConstraintException::INVALID_INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
             );
         }
 
         if (!is_bool($configuration['insert_google_recaptcha_preconnect_link'])) {
             throw new ReCaptchaConstraintException(
                 'invalid insert_google_recaptcha_preconnect_link field',
-                ReCaptchaConstraintException::INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
+                ReCaptchaConstraintException::INVALID_INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK
             );
         }
 

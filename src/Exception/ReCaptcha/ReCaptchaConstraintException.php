@@ -47,12 +47,12 @@ class ReCaptchaConstraintException extends ReCaptchaException
     /**
      * When import_google_recaptcha_script field is invalid
      */
-    public const IMPORT_GOOGLE_RECAPTCHA_SCRIPT = 80;
+    public const INVALID_IMPORT_GOOGLE_RECAPTCHA_SCRIPT = 80;
 
     /**
      * When insert_google_recaptcha_preconnect_link field is invalid
      */
-    public const INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK = 90;
+    public const INVALID_INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK = 90;
 
     /**
      * When merchant_email field is invalid
