@@ -40,16 +40,16 @@ import {
    * Adds reCAPTCHA attributes and an event listener to a button element.
    *
    * @param {HTMLButtonElement} btnElm - The button element to add reCAPTCHA attributes and event listener to.
-   * @param {HTMLFormElement|null} formElm - The form element to handle on submit event.
+   * @param {HTMLFormElement} formElm - The form element to handle on submit event.
    *
    * @returns {void} - This function does not return a value.
    */
   const addRecaptchaAndListener = (
     btnElm: HTMLButtonElement,
-    formElm: HTMLFormElement | null = null,
+    formElm: HTMLFormElement,
   ): void => {
     addRecaptchaAttributes(btnElm)
-    btnElm.addEventListener('click', (ev) => handleSubmit(ev, btnElm, formElm))
+    btnElm.addEventListener('click', (ev) => handleSubmit(ev, formElm))
   }
 
   /**
@@ -126,24 +126,13 @@ import {
    * Submits a form after reCAPTCHA verification.
    *
    * @param {MouseEvent} ev - The click event triggered by submitting the form.
-   * @param {HTMLButtonElement} btnElm - The button element clicked to submit the form.
-   * @param {HTMLFormElement | null} formElm - The form element to be submitted. Default value is null.
+   * @param {HTMLFormElement} formElm - The form element to be submitted.
    *
    * @returns {void}
    */
-  const handleSubmit = (
-    ev: MouseEvent,
-    btnElm: HTMLButtonElement,
-    formElm: HTMLFormElement | null = null,
-  ): void => {
+  const handleSubmit = (ev: MouseEvent, formElm: HTMLFormElement): void => {
     grecaptcha.ready(async () => {
       ev.preventDefault()
-
-      formElm = formElm || btnElm.closest('form')
-
-      if (null === formElm) {
-        return
-      }
 
       try {
         let token
@@ -233,12 +222,27 @@ import {
       login: prepareLoginForm,
       registration: prepareRegistrationForm,
     }
-    const { btnElm, formElm } = fns[type]()
+    const { btnElm, ...rest } = fns[type]()
+    let { formElm } = rest
 
     if (!btnElm) {
-      console.error(`${type} button not found`)
+      throw new Error(`${type} button not found`)
+    }
 
-      return
+    formElm = formElm || btnElm.closest('form')
+
+    if (!formElm) {
+      throw new Error(`${type} form not found`)
+    }
+
+    if ('contact' === type) {
+      const hiddenElm = document.createElement('input')
+
+      hiddenElm.setAttribute('type', 'hidden')
+      hiddenElm.setAttribute('name', 'submitMessage')
+      hiddenElm.setAttribute('value', '1')
+
+      formElm.appendChild(hiddenElm)
     }
 
     addRecaptchaAndListener(btnElm as HTMLButtonElement, formElm)
