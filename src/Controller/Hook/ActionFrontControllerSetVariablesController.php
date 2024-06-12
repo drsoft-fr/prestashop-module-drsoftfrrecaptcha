@@ -96,6 +96,7 @@ final class ActionFrontControllerSetVariablesController extends AbstractHookCont
                 return $values;
             }
 
+            $values['merchantEmail'] = $this->settings['merchant_email'];
             $values['formType'] = $type;
             $values['siteKey'] = $this->settings['site_key'];
             $values['moduleDrsoftfrrecaptchaVerifyReCaptchaV3Url'] = $this
@@ -111,8 +112,10 @@ final class ActionFrontControllerSetVariablesController extends AbstractHookCont
                     ->getContext()
                     ->getTranslator()
                     ->trans(
-                        'Error during submission, please contact us for further assistance.',
-                        [],
+                        'Error during submission, please contact #email# for further assistance.',
+                        [
+                            '#email#' => !empty($this->settings['merchant_email']) ? $this->settings['merchant_email'] : 'us',
+                        ],
                         'Modules.Drsoftfrrecaptcha.Shop'
                     )
             ];

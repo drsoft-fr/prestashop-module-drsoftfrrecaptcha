@@ -10,6 +10,7 @@ type ConfigurableObjectType = Record<string, unknown>
  */
 interface DrSoftFrReCaptchaObjectInterface {
   formType: string
+  merchantEmail: string
   moduleDrsoftfrrecaptchaVerifyReCaptchaV3Url: string
   siteKey: string
   text: JsTextType

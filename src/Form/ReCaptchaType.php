@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace DrSoftFr\Module\ReCaptcha\Form;
 
 use PrestaShop\PrestaShop\Core\ConstraintValidator\Constraints\CleanHtml;
+use PrestaShop\PrestaShop\Core\Domain\ValueObject\Email as EmployeeEmail;
+use PrestaShopBundle\Form\Admin\Type\EmailType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -143,6 +147,43 @@ final class ReCaptchaType extends TranslatorAwareType
                     'Modules.Drsoftfrrecaptcha.Admin'
                 ),
                 'required' => false,
+            ])
+            ->add('merchant_email', EmailType::class, [
+                'constraints' => [
+                    $this->getLengthConstraint(),
+                    new CleanHtml(),
+                    new Email([
+                        'message' => $this->trans(
+                            '%s is invalid.',
+                            'Admin.Notifications.Error'
+                        ),
+                    ]),
+                ],
+                'empty_data' => '',
+                'label' => $this->trans(
+                    'Merchant email address',
+                    'Modules.Drsoftfrrecaptcha.Admin'
+                ),
+                'required' => false,
             ]);
+    }
+
+    /**
+     * Returns a Length constraint object for validating the length of a field.
+     *
+     * @return Length The Length constraint object.
+     */
+    private function getLengthConstraint(): Length
+    {
+        $options = [
+            'max' => EmployeeEmail::MAX_LENGTH,
+            'maxMessage' => $this->trans(
+                'This field cannot be longer than %limit% characters',
+                'Admin.Notifications.Error',
+                ['%limit%' => EmployeeEmail::MAX_LENGTH]
+            ),
+        ];
+
+        return new Length($options);
     }
 }

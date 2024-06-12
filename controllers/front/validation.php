@@ -129,9 +129,10 @@ final class DrsoftfrrecaptchaValidationModuleFrontController extends ModuleFront
             $err = $resp->getErrorCodes() ? implode(', ', $resp->getErrorCodes()) : '';
 
             $this->sendErrorResponse(
-                'You are robot please contact shop support for further assistance. reCAPTCHA verification failed. Error code: #code#',
+                'You are robot please contact #email# for further assistance. reCAPTCHA verification failed. Error code: #code#',
                 [
-                    '#code#' => $err
+                    '#email#' => !empty($settings['merchant_email']) ? $settings['merchant_email'] : 'us',
+                    '#code#' => $err,
                 ]
             );
         }

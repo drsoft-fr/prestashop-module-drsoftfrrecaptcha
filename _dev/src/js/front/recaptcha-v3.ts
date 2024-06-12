@@ -31,8 +31,9 @@ import {
    * @property {string} error - An error message for registration failure.
    */
   const TEXT: JsTextType = {
-    error:
-      'Error during submission, please contact us for further assistance.',
+    error: `Error during submission, please contact ${
+      props.merchantEmail ? props.merchantEmail : 'us'
+    } for further assistance.`,
   }
 
   /**

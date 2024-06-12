@@ -53,4 +53,9 @@ class ReCaptchaConstraintException extends ReCaptchaException
      * When insert_google_recaptcha_preconnect_link field is invalid
      */
     public const INSERT_GOOGLE_RECAPTCHA_PRECONNECT_LINK = 90;
+
+    /**
+     * When merchant_email field is invalid
+     */
+    public const INVALID_MERCHANT_EMAIL = 100;
 }

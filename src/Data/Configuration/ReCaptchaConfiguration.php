@@ -28,6 +28,7 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'score' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SCORE',
         'site_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SITE_KEY',
         'secret_key' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_SECRET_KEY',
+        'merchant_email' => 'DRSOFT_FR_GOOGLE_RECAPTCHA_MERCHANT_EMAIL',
     ];
 
     const CONFIGURATION_DEFAULT_VALUES = [
@@ -40,6 +41,7 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
         'score' => 1.0,
         'site_key' => '',
         'secret_key' => '',
+        'merchant_email' => '',
     ];
 
     /**
@@ -160,7 +162,8 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             ->validateInsertGoogleRecaptchaPreconnectLink($configuration)
             ->validateScore($configuration)
             ->validateSiteKey($configuration)
-            ->validateSecretKey($configuration);
+            ->validateSecretKey($configuration)
+            ->validateMerchantEmail($configuration);
 
         return true;
     }
@@ -401,11 +404,11 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
      *
      * @param array $configuration The ReCaptcha configuration array.
      *
-     * @return void
+     * @return ReCaptchaConfiguration The ReCaptcha configuration object.
      *
      * @throws ReCaptchaConstraintException When the "secret_key" field is missing or invalid.
      */
-    private function validateSecretKey(array $configuration): void
+    private function validateSecretKey(array $configuration): ReCaptchaConfiguration
     {
         if (!isset($configuration['secret_key'])) {
             throw new ReCaptchaConstraintException(
@@ -418,6 +421,34 @@ final class ReCaptchaConfiguration implements DataConfigurationInterface
             throw new ReCaptchaConstraintException(
                 'invalid secret_key field',
                 ReCaptchaConstraintException::INVALID_SECRET_KEY
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validates the "merchant_email" field of the ReCaptcha configuration.
+     *
+     * @param array $configuration The ReCaptcha configuration array.
+     *
+     * @return void
+     *
+     * @throws ReCaptchaConstraintException When the "merchant_email" field is missing or invalid.
+     */
+    private function validateMerchantEmail(array $configuration): void
+    {
+        if (!isset($configuration['merchant_email'])) {
+            throw new ReCaptchaConstraintException(
+                'empty merchant_email field',
+                ReCaptchaConstraintException::INVALID_MERCHANT_EMAIL
+            );
+        }
+
+        if (!is_string($configuration['merchant_email'])) {
+            throw new ReCaptchaConstraintException(
+                'invalid merchant_email field',
+                ReCaptchaConstraintException::INVALID_MERCHANT_EMAIL
             );
         }
     }
