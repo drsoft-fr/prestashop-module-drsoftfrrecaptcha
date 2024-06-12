@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DrSoftFr\Module\ReCaptcha\Install;
 
 use DrSoftFr\Module\ReCaptcha\Data\Configuration\ReCaptchaConfiguration;
+use Exception;
 use Module;
 use Throwable;
 
@@ -37,21 +38,19 @@ final class Installer
     /**
      * Module's installation entry point.
      *
-     * @param Module $module
+     * @param Module $module The module to install.
      *
-     * @return bool
+     * @return bool True if the module is successfully installed.
+     *
+     * @throws Exception If an error occurs during the installation process.
      */
     public function install(Module $module): bool
     {
-        try {
-            if (!$this->registerHooks($module)) {
-                return false;
-            }
-
-            $this->recaptchaConfiguration->initConfiguration();
-        } catch (Throwable $t) {
-            return false;
+        if (!$this->registerHooks($module)) {
+            throw new Exception('An error occurred when registering hooks for the module.');
         }
+
+        $this->recaptchaConfiguration->initConfiguration();
 
         return true;
     }
@@ -59,16 +58,18 @@ final class Installer
     /**
      * Module's uninstallation entry point.
      *
-     * @param Module $module
+     * @param Module $module The module to uninstall.
      *
-     * @return bool
+     * @return bool True if the module is successfully uninstalled
+     *
+     * @throws Exception if an error occurs when deleting the module parameters.
      */
     public function uninstall(Module $module): bool
     {
         try {
             $this->recaptchaConfiguration->removeConfiguration();
         } catch (Throwable $t) {
-            return false;
+            throw new Exception('An error occurred when deleting the module parameters.');
         }
 
         return true;

@@ -71,7 +71,7 @@ class drsoftfrrecaptcha extends Module
                 'wording_domain' => 'Modules.Drsoftfrrecaptcha.Admin',
             ],
         ];
-        $this->version = '0.0.1';
+        $this->version = '1.0.0';
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha';
         $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha/issues';
@@ -177,12 +177,22 @@ class drsoftfrrecaptcha extends Module
         $this->_clearCache('*');
 
         if (!parent::install()) {
+            $this->_errors[] = $this->trans(
+                'There was an error during the installation.',
+                [],
+                'Modules.Drsoftfrrecaptcha.Error'
+            );
+
             return false;
         }
 
-        $installer = InstallerFactory::create();
+        try {
+            $installer = InstallerFactory::create();
 
-        if (!$installer->install($this)) {
+            $installer->install($this);
+        } catch (Throwable $t) {
+            $this->_errors[] = $t->getMessage();
+
             return false;
         }
 
@@ -228,21 +238,29 @@ class drsoftfrrecaptcha extends Module
      * Uninstalls the module
      *
      * @return bool Returns true if uninstallation was successful, false otherwise
-     *
-     * @throws Exception
      */
     public function uninstall(): bool
     {
         $this->_clearCache('*');
 
-        /** @var Installer $installer */
-        $installer = $this->get(Config::INSTALLER_SERVICE);
+        try {
+            /** @var Installer $installer */
+            $installer = $this->get(Config::INSTALLER_SERVICE);
 
-        if (!$installer->uninstall($this)) {
+            $installer->uninstall($this);
+        } catch (Throwable $t) {
+            $this->_errors[] = $t->getMessage();
+
             return false;
         }
 
         if (!parent::uninstall()) {
+            $this->_errors[] = $this->trans(
+                'There was an error during the uninstallation.',
+                [],
+                'Modules.Drsoftfrrecaptcha.Error'
+            );
+
             return false;
         }
 
