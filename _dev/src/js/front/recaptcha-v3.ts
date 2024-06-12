@@ -257,9 +257,8 @@ import {
    */
   const prepareContactForm = (): PrepareFormObjectReturnInterface => {
     const bodyElm = getElementById<HTMLBodyElement>('contact')
-    const alertElms = document.querySelectorAll('#contact .alert.alert-success')
 
-    if (!bodyElm || 0 < alertElms.length) {
+    if (!bodyElm) {
       throw new Error('Error during preparation of the contact form')
     }
 
