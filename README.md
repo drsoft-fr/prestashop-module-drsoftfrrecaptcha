@@ -28,6 +28,11 @@ for production :
 for development :
 
 - [composer](https://getcomposer.org/)
+- [eslint](https://eslint.org/)
+- [prettier](https://prettier.io/)
+- [npm](https://www.npmjs.com/)
+- [vite](https://vitejs.dev/)
+- [TypeScript](https://www.typescriptlang.org/index.html)
 
 ## Install
 
