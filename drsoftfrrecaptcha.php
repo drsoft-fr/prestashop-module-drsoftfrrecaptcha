@@ -9,6 +9,7 @@ use DrSoftFr\Module\ReCaptcha\Controller\Hook\ActionFrontControllerSetVariablesC
 use DrSoftFr\Module\ReCaptcha\Controller\Hook\DisplayHeaderController;
 use DrSoftFr\Module\ReCaptcha\Install\Factory\InstallerFactory;
 use DrSoftFr\Module\ReCaptcha\Install\Installer;
+use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
 if (!defined('_PS_VERSION_') || !defined('_CAN_LOAD_FILES_')) {
     exit;
@@ -174,8 +175,6 @@ class drsoftfrrecaptcha extends Module
      */
     public function install(): bool
     {
-        $this->_clearCache('*');
-
         if (!parent::install()) {
             $this->_errors[] = $this->trans(
                 'There was an error during the installation.',
@@ -194,6 +193,12 @@ class drsoftfrrecaptcha extends Module
             $this->_errors[] = $t->getMessage();
 
             return false;
+        }
+
+        try {
+            $this->getCacheClearerChain()->clear();
+        } catch (Throwable $t) {
+            $this->_errors[] = $t->getMessage();
         }
 
         return true;
@@ -241,8 +246,6 @@ class drsoftfrrecaptcha extends Module
      */
     public function uninstall(): bool
     {
-        $this->_clearCache('*');
-
         try {
             /** @var Installer $installer */
             $installer = $this->get(Config::INSTALLER_SERVICE);
@@ -264,6 +267,30 @@ class drsoftfrrecaptcha extends Module
             return false;
         }
 
+        try {
+            $this->getCacheClearerChain()->clear();
+        } catch (Throwable $t) {
+            $this->_errors[] = $t->getMessage();
+        }
+
         return true;
+    }
+
+    /**
+     * Get the CacheClearerChain.
+     *
+     * @return CacheClearerChain
+     *
+     * @throws Exception
+     */
+    private function getCacheClearerChain(): CacheClearerChain
+    {
+        $cacheClearerChain = $this->get('prestashop.core.cache.clearer.cache_clearer_chain');
+
+        if (!($cacheClearerChain instanceof CacheClearerChain)) {
+            throw new Exception('The cacheClearerChain object must implement CacheClearerChain.');
+        }
+
+        return $cacheClearerChain;
     }
 }
