@@ -9,6 +9,7 @@ use PrestaShop\PrestaShop\Core\Domain\ValueObject\Email as EmployeeEmail;
 use PrestaShopBundle\Form\Admin\Type\EmailType;
 use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
@@ -137,7 +138,7 @@ final class ReCaptchaType extends TranslatorAwareType
                 ),
                 'required' => false,
             ])
-            ->add('secret_key', TextType::class, [
+            ->add('secret_key', PasswordType::class, [
                 'constraints' => [
                     new CleanHtml(),
                 ],
