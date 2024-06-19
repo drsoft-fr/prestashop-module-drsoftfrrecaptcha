@@ -10,6 +10,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['prestashop', '$', 'jquery'],
       input: {
+        'preload-recaptcha': resolve(__dirname, 'src/js/front/preload-recaptcha.ts'),
         'recaptcha-v3': resolve(__dirname, 'src/js/front/recaptcha-v3.ts'),
       },
       output: {

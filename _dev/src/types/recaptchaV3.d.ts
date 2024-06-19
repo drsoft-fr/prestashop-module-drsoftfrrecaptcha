@@ -1,9 +1,22 @@
+import { UnknownType } from '@src/types/app'
+
 declare global {
   const grecaptcha: IReCaptchaInstance
 
   interface Window {
     grecaptcha: IReCaptchaInstance
+    ___grecaptcha_cfg: IReCaptchaCfg
   }
+}
+
+/**
+ * Represents the configuration for reCaptcha functionality.
+ *
+ * @interface
+ */
+export interface IReCaptchaCfg {
+  fns: Array<CallableFunction>
+  [key: string]: UnknownType
 }
 
 /**

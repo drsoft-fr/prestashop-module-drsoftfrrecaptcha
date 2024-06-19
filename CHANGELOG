@@ -1,4 +1,12 @@
 =============================================================
+v1.0.1 - 2024-06-19
+=============================================================
+
+- update: Update reCAPTCHA handling and error management
+
+          This significant update enriches the reCAPTCHA functionality of the application. It splits form submission and reCAPTCHA readiness into separate functions and enhances error handling by providing more detailed error messages. A new configuration interface for the reCAPTCHA functionality is also defined. Moreover, a preload-recaptcha script was added to ensure reCAPTCHA is ready before any actions are performed. The project's package version was updated to reflect these changes.;
+
+=============================================================
 v1.0.0 - 2024-06-12
 =============================================================
 

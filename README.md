@@ -44,6 +44,25 @@ $ cd drsoftfrrecaptcha
 $ composer install -o --no-dev
 $ cd {PRESTASHOP_FOLDER}
 $ php ./bin/console prestashop:module install drsoftfrrecaptcha
+$ php ./bin/console cache:clear --env=prod --no-debug
+```
+
+### Build assets
+
+Build assets for production
+
+```bash
+$ cd {PRESTASHOP_FOLDER}/modules/drsoftfrrecaptcha/_dev
+$ npm run install
+$ npm run build
+```
+
+Build assets for development
+
+```bash
+$ cd {PRESTASHOP_FOLDER}/modules/drsoftfrrecaptcha/_dev
+$ npm run install
+$ npm run watch
 ```
 
 ## Links
