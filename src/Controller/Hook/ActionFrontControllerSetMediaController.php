@@ -138,6 +138,11 @@ final class ActionFrontControllerSetMediaController extends AbstractHookControll
             }
 
             $this->getContext()->controller->registerJavascript(
+                'modules-' . $this->module->name . '-preload-recaptcha',
+                'modules/' . $this->module->name . '/views/' . $this->manifest->getUrl('src/js/front/preload-recaptcha.ts')['file']
+            );
+
+            $this->getContext()->controller->registerJavascript(
                 'modules-' . $this->module->name . '-recaptcha-v3',
                 'modules/' . $this->module->name . '/views/' . $this->manifest->getUrl('src/js/front/recaptcha-v3.ts')['file']
             );

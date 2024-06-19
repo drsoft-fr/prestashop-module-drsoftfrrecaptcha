@@ -103,7 +103,7 @@ import {
    * @param {HTMLFormElement} form - The form element.
    * @param {null|string} [message=null] - Optional error message.
    *
-   * @returns {void} - A promise that resolves when error handling is complete.
+   * @returns {void}
    */
   const handleError = (
     form: HTMLFormElement,
@@ -123,6 +123,53 @@ import {
   }
 
   /**
+   * Handles grecaptcha ready state.
+   *
+   * @param {MouseEvent} ev - The event to be prevented.
+   * @param {HTMLFormElement} formElm - The form to be handled.
+   * @returns {void}
+   */
+  const handleRecaptchaReady = (
+    ev: MouseEvent,
+    formElm: HTMLFormElement,
+  ): void => {
+    ev.preventDefault()
+
+    try {
+      grecaptcha
+        .execute(props.siteKey, {
+          action: 'submit',
+        })
+        .then((token) => postForm(token))
+        .then((response) => {
+          if (!response.success) {
+            handleError(formElm, response.message)
+
+            return
+          }
+
+          triggerFormSubmit(formElm)
+        })
+        .catch((error) => {
+          let message = null
+
+          if (error && error instanceof Error) {
+            message = error.message
+          }
+
+          handleError(formElm, message)
+          console.error(error)
+        })
+    } catch (error) {
+      if (error && error instanceof Error) {
+        handleError(formElm, error.message)
+      }
+
+      console.error(error)
+    }
+  }
+
+  /**
    * Submits a form after reCAPTCHA verification.
    *
    * @param {MouseEvent} ev - The click event triggered by submitting the form.
@@ -131,35 +178,7 @@ import {
    * @returns {void}
    */
   const handleSubmit = (ev: MouseEvent, formElm: HTMLFormElement): void => {
-    grecaptcha.ready(async () => {
-      ev.preventDefault()
-
-      try {
-        let token
-
-        try {
-          token = await grecaptcha.execute(props.siteKey, {
-            action: 'submit',
-          })
-        } catch (error) {
-          handleError(formElm)
-
-          return
-        }
-
-        const response = await postForm(token)
-
-        if (!response.success) {
-          handleError(formElm, response.message)
-
-          return
-        }
-      } catch (error) {
-        console.error(error)
-      }
-
-      formElm.submit()
-    })
+    grecaptcha.ready(() => handleRecaptchaReady(ev, formElm))
   }
 
   /**
@@ -203,7 +222,13 @@ import {
     } catch (error) {
       console.error(error)
 
-      return { success: false, message: '' }
+      let message = ''
+
+      if (error && error instanceof Error) {
+        message = error.message
+      }
+
+      return { success: false, message }
     }
   }
 
@@ -335,6 +360,17 @@ import {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  /**
+   * Triggers form submit.
+   *
+   * @param {HTMLFormElement} form - The form to be submitted.
+   *
+   * @returns {void}
+   */
+  const triggerFormSubmit = (form: HTMLFormElement): void => {
+    form.submit()
   }
 
   document.addEventListener('DOMContentLoaded', run)

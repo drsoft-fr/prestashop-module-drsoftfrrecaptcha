@@ -72,7 +72,7 @@ class drsoftfrrecaptcha extends Module
                 'wording_domain' => 'Modules.Drsoftfrrecaptcha.Admin',
             ],
         ];
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha';
         $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrrecaptcha/issues';
